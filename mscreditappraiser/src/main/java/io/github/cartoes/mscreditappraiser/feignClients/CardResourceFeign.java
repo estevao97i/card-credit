@@ -1,5 +1,6 @@
 package io.github.cartoes.mscreditappraiser.feignClients;
 
+import io.github.cartoes.mscreditappraiser.model.Card;
 import io.github.cartoes.mscreditappraiser.model.ClientCard;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -13,4 +14,7 @@ public interface CardResourceFeign {
 
     @GetMapping(params = "cpf")
     ResponseEntity<List<ClientCard>> findCardsPerClient(@RequestParam("cpf") String cpf);
+
+    @GetMapping(params = "amount")
+    ResponseEntity<List<Card>> getCardAmountTo(@RequestParam("amount") Long amount);
 }
