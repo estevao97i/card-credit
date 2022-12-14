@@ -3,10 +3,11 @@ package io.github.cartoes.mscreditappraiser.service;
 import feign.FeignException;
 import io.github.cartoes.mscreditappraiser.exception.ClientDataNotFoundException;
 import io.github.cartoes.mscreditappraiser.exception.ErrorComunicationMicroServicesException;
+import io.github.cartoes.mscreditappraiser.exception.ErrorRequestCardException;
 import io.github.cartoes.mscreditappraiser.feignClients.CardResourceFeign;
 import io.github.cartoes.mscreditappraiser.feignClients.ClientResourceFeign;
+import io.github.cartoes.mscreditappraiser.ifra.mqueue.EmitCardPublisher;
 import io.github.cartoes.mscreditappraiser.model.*;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +24,7 @@ public class SituationCreditService {
 
     private final ClientResourceFeign clientResourceFeign;
     private final CardResourceFeign cardResourceFeign;
+    private final EmitCardPublisher emitCardPublisher;
 
     public SituationCredit getSituationClient(String cpf) throws ClientDataNotFoundException,
             ErrorComunicationMicroServicesException {
@@ -83,6 +86,16 @@ public class SituationCreditService {
             throw new ErrorComunicationMicroServicesException(e.getMessage(), status);
         }
 
+    }
+
+    public ProtocolCard requestEmitCard(DataEmitCard data) {
+        try{
+            emitCardPublisher.sendCard(data);
+            var protocol = UUID.randomUUID().toString();
+            return new ProtocolCard(protocol);
+        } catch (Exception e) {
+            throw new ErrorRequestCardException(e.getMessage());
+        }
     }
 
 }

@@ -2,9 +2,8 @@ package io.github.cartoes.mscreditappraiser.resources;
 
 import io.github.cartoes.mscreditappraiser.exception.ClientDataNotFoundException;
 import io.github.cartoes.mscreditappraiser.exception.ErrorComunicationMicroServicesException;
-import io.github.cartoes.mscreditappraiser.model.DataAvaliation;
-import io.github.cartoes.mscreditappraiser.model.ReturnAvaliationCard;
-import io.github.cartoes.mscreditappraiser.model.SituationCredit;
+import io.github.cartoes.mscreditappraiser.exception.ErrorRequestCardException;
+import io.github.cartoes.mscreditappraiser.model.*;
 import io.github.cartoes.mscreditappraiser.service.SituationCreditService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
