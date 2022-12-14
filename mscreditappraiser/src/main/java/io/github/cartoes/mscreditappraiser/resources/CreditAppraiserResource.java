@@ -48,4 +48,14 @@ public class CreditAppraiserResource {
             return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
         }
     }
+
+    @PostMapping("request-cards")
+    public ResponseEntity requestCard(@RequestBody DataEmitCard data) {
+        try {
+            ProtocolCard protocolCard = service.requestEmitCard(data);
+            return ResponseEntity.ok(protocolCard);
+        } catch (ErrorRequestCardException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }
