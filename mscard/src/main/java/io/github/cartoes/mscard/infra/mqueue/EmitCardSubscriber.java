@@ -8,12 +8,14 @@ import io.github.cartoes.mscard.repository.CardRepository;
 import io.github.cartoes.mscard.repository.ClientCardRepository;
 import io.github.cartoes.mscard.service.dto.DataEmitCard;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class EmitCardSubscriber {
 
     private final CardRepository cardRepository;
@@ -22,6 +24,8 @@ public class EmitCardSubscriber {
     @RabbitListener(queues = "${mq.queues.emissao-cartoes}")
     public void receptEmit(@Payload String payload) {
 
+        System.out.println(payload);
+
         try {
             var mapper = new ObjectMapper();
             DataEmitCard data = mapper.readValue(payload, DataEmitCard.class);
@@ -29,12 +33,13 @@ public class EmitCardSubscriber {
 
             ClientCard clientCard = new ClientCard();
             clientCard.setCard(card);
+            clientCard.setCpf(card.getCpf());
             clientCard.setBasicLimit(card.getBasicLimit());
 
             clientCardRepository.save(clientCard);
 
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("Erro ao receber solicitacao de emissao de cartao: {} ", e.getMessage());
         }
     }
 }

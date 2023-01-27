@@ -20,6 +20,8 @@ public class Card {
 
     private String name;
 
+    private String cpf;
+
     @Enumerated(EnumType.STRING)
     private FlagCard card;
 

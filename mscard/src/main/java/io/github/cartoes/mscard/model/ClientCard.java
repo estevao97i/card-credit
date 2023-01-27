@@ -16,10 +16,12 @@ public class ClientCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String cpf;
 
     @ManyToOne
     @JoinColumn(name = "id_card")
     private Card card;
+
     private BigDecimal basicLimit;
 }

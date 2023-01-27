@@ -57,9 +57,9 @@ public class ClientResource {
         log.info("Entering find all clients method");
         List<Client> client = service.findAllClients();
 
-        if (client.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+//        if (client.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
 
         return ResponseEntity.ok(client);
     }
